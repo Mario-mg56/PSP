@@ -2,48 +2,44 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <string.h>
 #include <time.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 
-int main() {
-    int num;
-    char buffer[32];
 
-    // Crear FIFO1 (para enviar número)
+// 1. Crear dos programas en C fifo11.c fifo12.c que realicen las siguientes funciones:
+// i. Deberá responder al esquema de la figura. El proceso fifo11 se encargará de la gestión del pipe
+// FIFO1 y el proceso fifo12 de la del pipe FIFO2
+// ii. El proceso fifo11 generará un número aleatorio entre 0 y 10 en el pipe FIFO1
+// iii. El proceso fifo12 deberá calcular el resultado del factorial de dicho número y escribir el resultado
+// el pipe FIFO2
+// iv. El proceso fifo11 se encargará de mostrar por pantalla el resultado del cálculo
+// v. Al finalizar ambos procesos, se deberán eliminar los pipes.
+
+
+void main(){
     mkfifo("FIFO1", 0666);
+    printf("Fifo creado \n");
 
-    srand(time(NULL));
-    num = rand() % 11; // número aleatorio entre 0 y 10
+    int fd1;
+    fd1 = open("FIFO1", 1);
+    printf("fifo abierto: %d \n", fd1);
 
-    // Abrir FIFO1 para escritura
-    int fd1 = open("FIFO1", O_WRONLY);
-    if (fd1 < 0) {
-        perror("Error al abrir FIFO1");
-        exit(1);
-    }
-
-    // Enviar número al otro proceso
-    sprintf(buffer, "%d", num);
-    write(fd1, buffer, strlen(buffer) + 1);
+    time_t t;
+    srand((unsigned) time(&t));
+    char random[3];
+    sprintf(random, "%d", rand() % 10);
+    write(fd1, random, strlen(random));
+    printf("random: %s \n", random);
     close(fd1);
-    printf("[fifo11] Enviado número: %d\n", num);
 
-    // Esperar a que el otro proceso cree FIFO2
-    int fd2;
-    while ((fd2 = open("FIFO2", O_RDONLY)) < 0) {
-        usleep(100000); // Esperar 0.1 s
-    }
+    fd1 = open("FIFO1", 0);
+    int bytes = -1;
+    char buffer[3];
+    while (bytes != 0){bytes = read(fd1, buffer, 1);}
+    printf("El factorial de %s es %s \n", random, buffer);
 
-    // Leer el resultado del factorial
-    read(fd2, buffer, sizeof(buffer));
-    printf("El factorial de %d es %s\n", num, buffer);
-    close(fd2);
-
-    // Eliminar los FIFOs al final
     unlink("FIFO1");
-    unlink("FIFO2");
-
-    return 0;
 }

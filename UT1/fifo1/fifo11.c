@@ -23,22 +23,23 @@ void main(){
     const char *fifo1 = "FIFO1";
     const char *fifo2 = "FIFO2";
     mkfifo(fifo1, 0666);
-    int fp1 = open(fifo1, O_WRONLY), fp2 = -1;
-    printf("inicio 11");
-    while (fp2 == -1) {
-        fp2 = open(fifo2, O_RDONLY);
-        printf("fp2: %d", fp2);
-        sleep(0.1f);
+    int fd1, fd2;
+    fd1 = open(fifo1, O_WRONLY);
+    fd2 = -1;
+    while (fd2 == -1) {
+        fd2 = open(fifo2, O_RDONLY);
     }
-
+    
+    time_t t;
+    srand((unsigned) time(&t));
     char random[3];
     sprintf(random, "%d", rand() % 10);
-    write(fp1, random, strlen(random));
+    write(fd1, random, strlen(random));
     unlink(fifo1);
 
     int bytes = -1;
     char buffer[3];
-    while (bytes != 0){bytes = read(fp2, buffer, 1);}
+    while (bytes != 0){bytes = read(fd2, buffer, 1);}
 
     printf("El factorial de %s es %s \n", random, buffer);
 }

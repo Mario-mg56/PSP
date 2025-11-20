@@ -20,9 +20,8 @@ void main(){
     if (fork() != 0){
         time_t t; //Variable en la que vamos a introducir información relativa al tiempo
         time(&t); //Obtiene los segundos transcurridos desde el 1/1/1970 hasta ahora
-        //Guardo la referencia del string de la fecha para luego introducirlo en el array
-        char *str = ctime(&t); //ctime(&t) formatea esa fecha en un string más legible
-        strcpy(date, str); //strcpy copia el segundo parámetro en el primer parámetro
+        //ctime(&t) formatea esa fecha en un string más legible
+        strcpy(date, ctime(&t)); //strcpy copia el segundo parámetro en el primer parámetro
         close(fd[0]); //Cierro la llave de lectura
         write(fd[1], date, strlen(date));
     }

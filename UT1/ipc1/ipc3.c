@@ -21,8 +21,8 @@ void main(){
         char random1[4] = "", random2[4] = "";
         srand((unsigned) time(&t));
         //Generamos 2 numeros aleatorios entre 1 y 50
-        sprintf(random1, "%d", rand() % 50);
-        sprintf(random2, "%d", rand() % 50);
+        sprintf(random1, "%d", rand() % 50 + 1);
+        sprintf(random2, "%d", rand() % 50 + 1);
         strcat(random1, ",");
         strcat(random2, "f");
         strcat(random1, random2);

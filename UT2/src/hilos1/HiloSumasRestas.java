@@ -1,9 +1,11 @@
+package hilos1;
+
 public class HiloSumasRestas implements Runnable {
-    private int num, numveces;
+    private static int num = 1000;
+    private int numveces;
     private String op;
 
     public HiloSumasRestas (int numveces, String operacion){
-        this.num = 1000;
         this.numveces = numveces;
         this.op = operacion;
     }
@@ -15,7 +17,10 @@ public class HiloSumasRestas implements Runnable {
     }
 
     public void incrementar (int numveces){num += numveces;}
-    public void decrementar (int numveces){num -= numveces;}
+    public void decrementar (int numveces){
+        num -= numveces;
+        System.out.println("decrementado " + numveces + " veces");
+    }
 
     public static void main(String args[]) {
         HiloSumasRestas hiloSuma1 = new HiloSumasRestas(100, "+");

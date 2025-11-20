@@ -1,3 +1,5 @@
+package hilos1;
+
 public class HiloParInpar implements Runnable {
     int type;
     public HiloParInpar(int type) {

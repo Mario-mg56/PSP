@@ -1,0 +1,14 @@
+Para compilar desde la terminal con java, primero se genera el .class con 
+javac [ClassName].java
+
+Luego se ejecuta con
+java [ClassName]
+
+Para compilar un paquete, desde la carpeta source ejecutar
+javac -d [CompileFilesDir] [packageName]/*.java
+
+Luego se ejecuta con
+cd [CompileFilesDir]
+java [packageName].[ClassName]
+
+ 
